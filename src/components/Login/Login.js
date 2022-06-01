@@ -12,9 +12,18 @@ const Login = (props) => {
 	const [formIsValid, setFormIsValid] = useState(false)
 
 	useEffect(() => {
-		setFormIsValid(
-			enteredEmail.includes("@") && enteredPassword.trim().length > 6
-		)
+		// Added this as a debouncer to wait 500 ms when called then execute
+		const identifier = setTimeout(() => {
+			console.log("Checking form validity")
+			setFormIsValid(
+				enteredEmail.includes("@") && enteredPassword.trim().length > 6
+			)
+		}, 500)
+		// this is called a cleanup function that runs before the useEffect runs it's function but that's only after the first time the sideEffect is run
+		return () => {
+			console.log("Clean-up execution")
+			clearTimeout(identifier)
+		}
 	}, [enteredEmail, enteredPassword])
 
 	const emailChangeHandler = (event) => {
