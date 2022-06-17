@@ -1,95 +1,106 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from 'react';
 
-import Card from "../UI/Card/Card"
-import classes from "./Login.module.css"
-import Button from "../UI/Button/Button"
+import Card from '../UI/Card/Card';
+import classes from './Login.module.css';
+import Button from '../UI/Button/Button';
 
 const Login = (props) => {
-	const [enteredEmail, setEnteredEmail] = useState("")
-	const [emailIsValid, setEmailIsValid] = useState()
-	const [enteredPassword, setEnteredPassword] = useState("")
-	const [passwordIsValid, setPasswordIsValid] = useState()
-	const [formIsValid, setFormIsValid] = useState(false)
+  const [enteredEmail, setEnteredEmail] = useState('');
+  const [emailIsValid, setEmailIsValid] = useState();
+  const [enteredPassword, setEnteredPassword] = useState('');
+  const [passwordIsValid, setPasswordIsValid] = useState();
+  const [formIsValid, setFormIsValid] = useState(false);
 
-	useEffect(() => {
-		// Added this as a debouncer to wait 500 ms when called then execute
-		const identifier = setTimeout(() => {
-			console.log("Checking form validity")
-			setFormIsValid(
-				enteredEmail.includes("@") && enteredPassword.trim().length > 6
-			)
-		}, 500)
-		// this is called a cleanup function that runs before the useEffect runs it's function but that's only after the first time the sideEffect is run
-		return () => {
-			console.log("Clean-up execution")
-			clearTimeout(identifier)
-		}
-	}, [enteredEmail, enteredPassword])
+  useEffect(() => {
+    console.log('EFFECT RUNNING');
 
-	const emailChangeHandler = (event) => {
-		setEnteredEmail(event.target.value)
-	}
+    return () => {
+      console.log('EFFECT CLEANUP');
+    };
+  }, []);
 
-	const passwordChangeHandler = (event) => {
-		setEnteredPassword(event.target.value)
-	}
+  // useEffect(() => {
+  //   const identifier = setTimeout(() => {
+  //     console.log('Checking form validity!');
+  //     setFormIsValid(
+  //       enteredEmail.includes('@') && enteredPassword.trim().length > 6
+  //     );
+  //   }, 500);
 
-	const validateEmailHandler = () => {
-		setEmailIsValid(enteredEmail.includes("@"))
-	}
+  //   return () => {
+  //     console.log('CLEANUP');
+  //     clearTimeout(identifier);
+  //   };
+  // }, [enteredEmail, enteredPassword]);
 
-	const validatePasswordHandler = () => {
-		setPasswordIsValid(enteredPassword.trim().length > 6)
-	}
+  const emailChangeHandler = (event) => {
+    setEnteredEmail(event.target.value);
 
-	const submitHandler = (event) => {
-		event.preventDefault()
-		props.onLogin(enteredEmail, enteredPassword)
-	}
+    setFormIsValid(
+      event.target.value.includes('@') && enteredPassword.trim().length > 6
+    );
+  };
 
-	return (
-		<Card className={classes.login}>
-			<form onSubmit={submitHandler}>
-				<div
-					className={`${classes.control} ${
-						emailIsValid === false ? classes.invalid : ""
-					}`}
-				>
-					<label htmlFor="email">E-Mail</label>
-					<input
-						type="email"
-						id="email"
-						value={enteredEmail}
-						onChange={emailChangeHandler}
-						onBlur={validateEmailHandler}
-					/>
-				</div>
-				<div
-					className={`${classes.control} ${
-						passwordIsValid === false ? classes.invalid : ""
-					}`}
-				>
-					<label htmlFor="password">Password</label>
-					<input
-						type="password"
-						id="password"
-						value={enteredPassword}
-						onChange={passwordChangeHandler}
-						onBlur={validatePasswordHandler}
-					/>
-				</div>
-				<div className={classes.actions}>
-					<Button
-						type="submit"
-						className={classes.btn}
-						disabled={!formIsValid}
-					>
-						Login
-					</Button>
-				</div>
-			</form>
-		</Card>
-	)
-}
+  const passwordChangeHandler = (event) => {
+    setEnteredPassword(event.target.value);
 
-export default Login
+    setFormIsValid(
+      enteredEmail.includes('@') && event.target.value.trim().length > 6
+    );
+  };
+
+  const validateEmailHandler = () => {
+    setEmailIsValid(enteredEmail.includes('@'));
+  };
+
+  const validatePasswordHandler = () => {
+    setPasswordIsValid(enteredPassword.trim().length > 6);
+  };
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+    props.onLogin(enteredEmail, enteredPassword);
+  };
+
+  return (
+    <Card className={classes.login}>
+      <form onSubmit={submitHandler}>
+        <div
+          className={`${classes.control} ${
+            emailIsValid === false ? classes.invalid : ''
+          }`}
+        >
+          <label htmlFor="email">E-Mail</label>
+          <input
+            type="email"
+            id="email"
+            value={enteredEmail}
+            onChange={emailChangeHandler}
+            onBlur={validateEmailHandler}
+          />
+        </div>
+        <div
+          className={`${classes.control} ${
+            passwordIsValid === false ? classes.invalid : ''
+          }`}
+        >
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={enteredPassword}
+            onChange={passwordChangeHandler}
+            onBlur={validatePasswordHandler}
+          />
+        </div>
+        <div className={classes.actions}>
+          <Button type="submit" className={classes.btn} disabled={!formIsValid}>
+            Login
+          </Button>
+        </div>
+      </form>
+    </Card>
+  );
+};
+
+export default Login;
